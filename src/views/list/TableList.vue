@@ -4,55 +4,51 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="规则编号">
-              <a-input v-model="queryParam.id" placeholder=""/>
+            <a-form-item label="規則編號">
+              <a-input v-model="queryParam.id" placeholder/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-item label="使用状态">
-              <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
+            <a-form-item label="測試狀態">
+              <a-select v-model="queryParam.status" placeholder="請選擇" default-value="0">
                 <a-select-option value="0">全部</a-select-option>
-                <a-select-option value="1">关闭</a-select-option>
-                <a-select-option value="2">运行中</a-select-option>
+                <a-select-option value="1">測試中</a-select-option>
+                <a-select-option value="2">測試完成</a-select-option>
+                <a-select-option value="3">測試執行異常</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
-              <a-form-item label="调用次数">
+              <a-form-item label="測試執行次數">
                 <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="更新日期">
-                <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
+                <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="請輸入更新日期"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
-                <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
+              <a-form-item label="測試狀態">
+                <a-select v-model="queryParam.useStatus" placeholder="請選擇" default-value="0">
                   <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
-                <a-select placeholder="请选择" default-value="0">
-                  <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
+                  <a-select-option value="1">測試中</a-select-option>
+                  <a-select-option value="2">測試完成</a-select-option>
+                  <a-select-option value="3">測試執行異常</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
           </template>
           <a-col :md="!advanced && 8 || 24" :sm="24">
-            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+            <span
+              class="table-page-search-submitButtons"
+              :style="advanced && { float: 'right', overflow: 'hidden' } || {} "
+            >
+              <a-button type="primary" @click="$refs.table.refresh(true)">查詢</a-button>
               <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
               <a @click="toggleAdvanced" style="margin-left: 8px">
-                {{ advanced ? '收起' : '展开' }}
+                {{ advanced ? '收起' : '展開' }}
                 <a-icon :type="advanced ? 'up' : 'down'"/>
               </a>
             </span>
@@ -63,15 +59,20 @@
 
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新建</a-button>
-      <a-button type="dashed" @click="tableOption">{{ optionAlertShow && '关闭' || '开启' }} alert</a-button>
+      <a-button type="dashed" @click="tableOption">{{ optionAlertShow && '關閉' || '開啟' }} alert</a-button>
       <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
+          <a-menu-item key="1">
+            <a-icon type="delete"/>刪除
+          </a-menu-item>
           <!-- lock | unlock -->
-          <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
+          <a-menu-item key="2">
+            <a-icon type="lock"/>鎖定
+          </a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
-          批量操作 <a-icon type="down" />
+          批量操作
+          <a-icon type="down"/>
         </a-button>
       </a-dropdown>
     </div>
@@ -85,22 +86,20 @@
       :alert="options.alert"
       :rowSelection="options.rowSelection"
     >
-      <span slot="serial" slot-scope="text, record, index">
-        {{ index + 1 }}
-      </span>
+      <span slot="serial" slot-scope="text, record, index">{{ index + 1 }}</span>
       <span slot="status" slot-scope="text">
-        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter"/>
       </span>
 
       <span slot="action" slot-scope="text, record">
         <template>
           <a @click="handleEdit(record)">配置</a>
-          <a-divider type="vertical" />
-          <a @click="handleSub(record)">订阅报警</a>
+          <a-divider type="vertical"/>
+          <a @click="handleSub(record)">執行測試</a>
         </template>
       </span>
     </s-table>
-    <create-form ref="createModal" @ok="handleOk" />
+    <create-form ref="createModal" @ok="handleOk"/>
     <step-by-step-modal ref="modal" @ok="handleOk"/>
   </a-card>
 </template>
@@ -115,19 +114,19 @@ import { getRoleList, getServiceList } from '@/api/manage'
 const statusMap = {
   0: {
     status: 'default',
-    text: '关闭'
+    text: '還沒有執行過測試'
   },
   1: {
     status: 'processing',
-    text: '运行中'
+    text: '測試中'
   },
   2: {
     status: 'success',
-    text: '已上线'
+    text: '測試完成'
   },
   3: {
     status: 'error',
-    text: '异常'
+    text: '測試執行異常'
   }
 }
 
@@ -152,7 +151,7 @@ export default {
           scopedSlots: { customRender: 'serial' }
         },
         {
-          title: '规则编号',
+          title: '測試編號',
           dataIndex: 'no'
         },
         {
@@ -160,19 +159,19 @@ export default {
           dataIndex: 'description'
         },
         {
-          title: '服务调用次数',
+          title: '測試執行次數',
           dataIndex: 'callNo',
           sorter: true,
           needTotal: true,
-          customRender: (text) => text + ' 次'
+          customRender: text => text + ' 次'
         },
         {
-          title: '状态',
+          title: '狀態',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' }
         },
         {
-          title: '更新时间',
+          title: '更新時間',
           dataIndex: 'updatedAt',
           sorter: true
         },
@@ -186,17 +185,21 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getServiceList(Object.assign(parameter, this.queryParam))
-          .then(res => {
-            return res.result
-          })
+        return getServiceList(Object.assign(parameter, this.queryParam)).then(res => {
+          return res.result
+        })
       },
       selectedRowKeys: [],
       selectedRows: [],
 
       // custom table alert & rowSelection
       options: {
-        alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
+        alert: {
+          show: true,
+          clear: () => {
+            this.selectedRowKeys = []
+          }
+        },
         rowSelection: {
           selectedRowKeys: this.selectedRowKeys,
           onChange: this.onSelectChange
@@ -221,7 +224,12 @@ export default {
     tableOption () {
       if (!this.optionAlertShow) {
         this.options = {
-          alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
+          alert: {
+            show: true,
+            clear: () => {
+              this.selectedRowKeys = []
+            }
+          },
           rowSelection: {
             selectedRowKeys: this.selectedRowKeys,
             onChange: this.onSelectChange
@@ -243,9 +251,9 @@ export default {
     },
     handleSub (record) {
       if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
+        this.$message.info(`${record.no} 開始執行測試`)
       } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
+        this.$message.error(`${record.no} 測試執行失敗`)
       }
     },
     handleOk () {

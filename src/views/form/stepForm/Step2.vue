@@ -1,54 +1,34 @@
 <template>
   <div>
     <a-form style="max-width: 500px; margin: 40px auto 0;">
-      <a-alert
-        :closable="true"
-        message="确认转账后，资金将直接打入对方账户，无法退回。"
-        style="margin-bottom: 24px;"
-      />
+      <a-alert :closable="true" message="請確認以下測試資訊。" style="margin-bottom: 24px;"/>
       <a-form-item
-        label="付款账户"
+        label="測試帳戶"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
         class="stepFormText"
-      >
-        ant-design@alipay.com
-      </a-form-item>
+      >{{ form.tester }}</a-form-item>
       <a-form-item
-        label="收款账户"
+        label="測試範圍"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
         class="stepFormText"
-      >
-        test@example.com
-      </a-form-item>
+      >{{ form.testRange }}</a-form-item>
       <a-form-item
-        label="收款人姓名"
+        label="測試目標"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
         class="stepFormText"
-      >
-        Alex
-      </a-form-item>
+      >{{ form.testTarget }}</a-form-item>
       <a-form-item
-        label="转账金额"
+        label="測試描述"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
         class="stepFormText"
-      >
-        ￥ 5,000.00
-      </a-form-item>
-      <a-divider />
-      <a-form-item
-        label="支付密码"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        class="stepFormText"
-      >
-        <a-input type="password" style="width: 80%;" value="123456" />
-      </a-form-item>
+      >{{ form.testDescription }}</a-form-item>
+      <a-divider/>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button :loading="loading" type="primary" @click="nextStep">提交</a-button>
+        <a-button :loading="loading" type="primary" @click="nextStep">建立</a-button>
         <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
     </a-form>
@@ -58,6 +38,12 @@
 <script>
 export default {
   name: 'Step2',
+  props: {
+    form: {
+      type: Object,
+      default: null
+    }
+  },
   data () {
     return {
       labelCol: { lg: { span: 5 }, sm: { span: 5 } },
@@ -82,13 +68,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .stepFormText {
-    margin-bottom: 24px;
+.stepFormText {
+  margin-bottom: 24px;
 
-    .ant-form-item-label,
-    .ant-form-item-control {
-      line-height: 22px;
-    }
+  .ant-form-item-label,
+  .ant-form-item-control {
+    line-height: 22px;
   }
-
+}
 </style>

@@ -1,14 +1,14 @@
 <template>
   <a-card :bordered="false">
     <a-steps class="steps" :current="currentTab">
-      <a-step title="填写转账信息" />
-      <a-step title="确认转账信息" />
-      <a-step title="完成" />
+      <a-step title="撰寫測試資訊"/>
+      <a-step title="確認測試資訊"/>
+      <a-step title="完成"/>
     </a-steps>
     <div class="content">
-      <step1 v-if="currentTab === 0" @nextStep="nextStep"/>
-      <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
-      <step3 v-if="currentTab === 2" @prevStep="prevStep" @finish="finish"/>
+      <step1 v-if="currentTab === 0" @nextStep="nextStep" @updateForm="updateForm" :form="form"/>
+      <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep" :form="form"/>
+      <step3 v-if="currentTab === 2" @prevStep="prevStep" @finish="finish" :form="form"/>
     </div>
   </a-card>
 </template>
@@ -27,15 +27,17 @@ export default {
   },
   data () {
     return {
-      description: '将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。',
+      description: '快速建立一個測試情境',
       currentTab: 0,
-
-      // form
-      form: null
+      form: {
+        tester: '',
+        testRange: '',
+        testTarget: '',
+        testDescription: ''
+      }
     }
   },
   methods: {
-
     // handler
     nextStep () {
       if (this.currentTab < 2) {
@@ -48,15 +50,25 @@ export default {
       }
     },
     finish () {
+      this.form.tester = ''
+      this.form.testRange = ''
+      this.form.testTarget = ''
+      this.form.testDescription = ''
       this.currentTab = 0
+    },
+    updateForm (form) {
+      this.form.tester = form.tester
+      this.form.testRange = form.testRange
+      this.form.testTarget = form.testTarget
+      this.form.testDescription = form.testDescription
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-  .steps {
-    max-width: 750px;
-    margin: 16px auto;
-  }
+.steps {
+  max-width: 750px;
+  margin: 16px auto;
+}
 </style>
